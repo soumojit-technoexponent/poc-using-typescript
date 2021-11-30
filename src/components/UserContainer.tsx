@@ -3,21 +3,15 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchUsers, updateDislikes, updateLikes } from '../redux/action';
 import { useEffect } from "react";
 import { RootState } from "../redux/reducer";
-import { userData, userType } from "../interfaces";
+import { authData, userData, userType } from "../interfaces";
 
-// const defaultPosts:userType[] = [];
 
 export const UserContainer = () => {
 
     const dispatch = useDispatch();
     const userData: userData = useSelector((state: RootState) => state.userReducer);
+    const authData: authData  = useSelector((state: RootState) => state.loginReducer);
 
-    // console.log(userData);
-    let currentuser = localStorage.getItem('E-Mail');
-
-    if (typeof currentuser === 'string') {
-        var currUserEmail = JSON.parse(currentuser);
-    }
 
     useEffect(() => {
         dispatch(fetchUsers());
@@ -28,10 +22,10 @@ export const UserContainer = () => {
         <div>
             <Header />
             <div className="container-fluid py-4">
-                {currentuser !== '' ?
+                {authData.currentuser !== '' ?
                     <>
                         <div className="d-flex justify-content-between">
-                            <h2 className="text-light">Welcome {currUserEmail} !!</h2>
+                            <h2 className="text-light">Welcome {authData.currentuser} !!</h2>
                         </div>
                     </>
                     :
@@ -49,7 +43,7 @@ export const UserContainer = () => {
                                     Company: <b>{user.company.name}</b>
                                 </small>
                                 <br /><br />
-                                {currentuser ?
+                                {authData.currentuser ?
                                     <div>
                                         {
                                             (user.islike === 0) ?

@@ -17,3 +17,8 @@ export interface userData {
     users: userType[],
     error: string
 }
+
+export interface authData {
+    isLoggedIn: boolean,
+    currentuser: string
+}

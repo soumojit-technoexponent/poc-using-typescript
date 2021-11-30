@@ -3,6 +3,9 @@ import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedIn
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import Visibility from '@material-ui/icons/Visibility';
 import { Modal, NavLink } from 'reactstrap';
+import { loginAction, logoutAction } from '../redux/action/loginAction';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../redux/reducer';
 
 interface loginType {
     login_email: string,
@@ -12,11 +15,13 @@ interface loginType {
 
 const Header = () => {
 
-
+    const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [loginModal, setLoginModal] = useState<boolean>(false);
-    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
+    
+    const authData: { isLoggedIn: boolean, currentuser: string } = useSelector((state: RootState) => state.loginReducer);
 
+    // console.log(authData);
     const [data, setData] = useState<loginType>({
         login_email: '',
         login_password: '',
@@ -37,28 +42,11 @@ const Header = () => {
     const onSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
         console.log(data);
-        if (data.login_email === "soumo@gmail.com" && data.login_password === "1234") {
-            setData({
-                ...data,
-                login_email: '',
-                login_password: ''
-            })
-            console.log("Login Success");
-            localStorage.setItem('E-Mail', JSON.stringify(data.login_email));
-            // window.location.reload();
-            setLoggedIn(true);
-        }
-        else {
-            setData({
-                ...data,
-                error: "E-Mail or Password doesn't match"
-            })
-        }
+        dispatch(loginAction(data));
     }
 
     const onLogout = () => {
-        localStorage.clear();
-        setLoggedIn(false);
+        dispatch(logoutAction());
     }
 
     return (
@@ -70,7 +58,7 @@ const Header = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ml-auto">
-                        {isLoggedIn === false ?
+                        {authData.isLoggedIn === false ?
                             <>
                                 <li className="nav-item">
                                     <a className="nav-link" href="{#}" data-toggle="modal" data-target="#signupModal">Sign Up</a>
