@@ -12,8 +12,10 @@ interface loginType {
 
 const Header = () => {
 
+
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [loginModal, setLoginModal] = useState<boolean>(false);
+    const [isLoggedIn, setLoggedIn] = useState<boolean>(false);
 
     const [data, setData] = useState<loginType>({
         login_email: '',
@@ -43,7 +45,8 @@ const Header = () => {
             })
             console.log("Login Success");
             localStorage.setItem('E-Mail', JSON.stringify(data.login_email));
-            window.location.reload();
+            // window.location.reload();
+            setLoggedIn(true);
         }
         else {
             setData({
@@ -52,6 +55,12 @@ const Header = () => {
             })
         }
     }
+
+    const onLogout = () => {
+        localStorage.clear();
+        setLoggedIn(false);
+    }
+
     return (
         <div>
             <nav className="navbar navbar-expand-lg navbar-light bg-light px-5">
@@ -61,109 +70,122 @@ const Header = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ml-auto">
-                        <li className="nav-item">
-                            <a className="nav-link" href="{#}" data-toggle="modal" data-target="#signupModal">Sign Up</a>
-                            {/* Sign Up Modal */}
-                            <div className="modal fade" id="signupModal" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
-                                <div className="modal-dialog" role="document">
-                                    <div className="modal-content">
+                        {isLoggedIn === false ?
+                            <>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="{#}" data-toggle="modal" data-target="#signupModal">Sign Up</a>
+                                    {/* Sign Up Modal */}
+                                    <div className="modal fade" id="signupModal" role="dialog" aria-labelledby="signupModalLabel" aria-hidden="true">
+                                        <div className="modal-dialog" role="document">
+                                            <div className="modal-content">
+                                                <div className="modal-header">
+                                                    <h3 className="modal-title" id="signupModalLabel">Sign Up</h3>
+                                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div className="modal-body">
+                                                    <form>
+                                                        <div className="form-group">
+                                                            <TextField
+                                                                label="Name"
+                                                                variant="outlined"
+                                                                required />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <TextField
+                                                                label="E-Mail"
+                                                                variant="outlined"
+                                                                required />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <TextField
+                                                                label="Mobile No"
+                                                                variant="outlined"
+                                                                required />
+                                                        </div>
+                                                        <div className="form-group">
+                                                            <Button variant="contained" color="primary">
+                                                                Sign Up
+                                                            </Button>
+                                                        </div>
+                                                        <h6>Already a member? <a href="/" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">Sign In</a>
+                                                        </h6>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li className="nav-item">
+                                    <NavLink to={"/"} onClick={toggleLoginModal}>Log In</NavLink>
+                                    {/* Log In Modal */}
+                                    <Modal isOpen={loginModal} toggle={toggleLoginModal}>
                                         <div className="modal-header">
-                                            <h3 className="modal-title" id="signupModalLabel">Sign Up</h3>
-                                            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                            <h3 className="modal-title" id="loginModalLabel">Sign In</h3>
+                                            <button type="button" className="close" onClick={toggleLoginModal} aria-label="Close">
                                                 <span aria-hidden="true">&times;</span>
                                             </button>
                                         </div>
                                         <div className="modal-body">
-                                            <form>
-                                                <div className="form-group">
-                                                    <TextField
-                                                        label="Name"
-                                                        variant="outlined"
-                                                        required />
-                                                </div>
+                                            <form onSubmit={onSubmit}>
                                                 <div className="form-group">
                                                     <TextField
                                                         label="E-Mail"
                                                         variant="outlined"
+                                                        value={data.login_email}
+                                                        onChange={handleLoginChange('login_email')}
                                                         required />
                                                 </div>
                                                 <div className="form-group">
-                                                    <TextField
-                                                        label="Mobile No"
-                                                        variant="outlined"
-                                                        required />
+                                                    <FormControl id="outlined-basic" variant="outlined">
+                                                        <InputLabel>Password</InputLabel>
+                                                        <OutlinedInput
+                                                            type={showPassword ? 'text' : 'password'}
+                                                            value={data.login_password}
+                                                            onChange={handleLoginChange('login_password')}
+                                                            endAdornment={
+                                                                <InputAdornment position="end">
+                                                                    <IconButton
+                                                                        aria-label="toggle password visibility"
+                                                                        onClick={onShowPassword}
+                                                                        edge="end"
+                                                                    >
+                                                                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                                                                    </IconButton>
+                                                                </InputAdornment>
+                                                            }
+                                                            labelWidth={80}
+                                                        />
+                                                    </FormControl>
                                                 </div>
+                                                {data.error !== '' ?
+                                                    <p className="text-danger">{data.error}</p>
+                                                    :
+                                                    null
+                                                }
                                                 <div className="form-group">
-                                                    <Button variant="contained" color="primary">
-                                                        Sign Up
+                                                    <Button type="submit" variant="contained" color="primary">
+                                                        Sign In
                                                     </Button>
                                                 </div>
-                                                <h6>Already a member? <a href="/" data-dismiss="modal" data-toggle="modal" data-target="#loginModal">Sign In</a>
+                                                <h6>Not yet a member?<a href="/" data-dismiss="modal" data-toggle="modal" data-target="#signupModal">Sign Up</a>
                                                 </h6>
                                             </form>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li className="nav-item">
-                            <NavLink to={"/"} onClick={toggleLoginModal}>Log In</NavLink>
-                            {/* Log In Modal */}
-                            <Modal isOpen={loginModal} toggle={toggleLoginModal}>
-                                <div className="modal-header">
-                                    <h3 className="modal-title" id="loginModalLabel">Sign In</h3>
-                                    <button type="button" className="close" onClick={toggleLoginModal} aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div className="modal-body">
-                                    <form onSubmit={onSubmit}>
-                                        <div className="form-group">
-                                            <TextField
-                                                label="E-Mail"
-                                                variant="outlined"
-                                                value={data.login_email}
-                                                onChange={handleLoginChange('login_email')}
-                                                required />
-                                        </div>
-                                        <div className="form-group">
-                                            <FormControl id="outlined-basic" variant="outlined">
-                                                <InputLabel>Password</InputLabel>
-                                                <OutlinedInput
-                                                    type={showPassword ? 'text' : 'password'}
-                                                    value={data.login_password}
-                                                    onChange={handleLoginChange('login_password')}
-                                                    endAdornment={
-                                                        <InputAdornment position="end">
-                                                            <IconButton
-                                                                aria-label="toggle password visibility"
-                                                                onClick={onShowPassword}
-                                                                edge="end"
-                                                            >
-                                                                {showPassword ? <Visibility /> : <VisibilityOff />}
-                                                            </IconButton>
-                                                        </InputAdornment>
-                                                    }
-                                                    labelWidth={80}
-                                                />
-                                            </FormControl>
-                                        </div>
-                                        {data.error !== '' ?
-                                            <p className="text-danger">{data.error}</p>
-                                            :
-                                            null
-                                        }
-                                        <div className="form-group">
-                                            <Button type="submit" variant="contained" color="primary">
-                                                Sign In
-                                            </Button>
-                                        </div>
-                                        <h6>Not yet a member?<a href="/" data-dismiss="modal" data-toggle="modal" data-target="#signupModal">Sign Up</a>
-                                        </h6>
-                                    </form>
-                                </div>
-                            </Modal>
-                        </li>
+                                    </Modal>
+                                </li>
+                            </>
+                            :
+                            <>
+                                <li className="nav-item">
+                                    <Button variant="contained" color="secondary" onClick={onLogout}>
+                                        Logout
+                                    </Button>
+                                </li>
+                            </>
+                        }
+
                     </ul>
                 </div>
             </nav>

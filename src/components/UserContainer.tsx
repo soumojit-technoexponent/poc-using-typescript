@@ -1,52 +1,44 @@
-import { useState, useEffect } from 'react';
 import Header from "./Header";
-import axios from 'axios';
-
-
-interface userType {
-    id: number,
-    name: string,
-    email: string,
-    company: {
-        name: string
-    },
-    // islike:number,
-    // likecount:number,
-    // dislikecount:number
-
-};
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUsers, updateDislikes, updateLikes } from '../redux/action';
+import { useEffect } from "react";
+import { RootState } from "../redux/reducer";
+import { userData, userType } from "../interfaces";
 
 // const defaultPosts:userType[] = [];
 
 export const UserContainer = () => {
-    
-    // const [users, setUser]: [userType[], (users: userType[]) => void] = React.useState(defaultPosts);
 
-    const [users, setUser] = useState<userType[]>([]);
+    const dispatch = useDispatch();
+    const userData: userData = useSelector((state: RootState) => state.userReducer);
+
+    // console.log(userData);
+    let currentuser = localStorage.getItem('E-Mail');
+
+    if (typeof currentuser === 'string') {
+        var currUserEmail = JSON.parse(currentuser);
+    }
 
     useEffect(() => {
-        axios.get("https://jsonplaceholder.typicode.com/users")
-            .then(response => {
-                const result = response.data
-                // result.forEach(element => {
-                //     element.islike = 0;
-                //     element.likecount = 0;
-                //     element.dislikecount = 0;
+        dispatch(fetchUsers());
+    }, [])
 
-                // });
-                setUser(result);
-            })
-            .catch(error => {
-                console.log(error)
-            });
-    }, [users]);
-    
+
     return (
         <div>
             <Header />
             <div className="container-fluid py-4">
+                {currentuser !== '' ?
+                    <>
+                        <div className="d-flex justify-content-between">
+                            <h2 className="text-light">Welcome {currUserEmail} !!</h2>
+                        </div>
+                    </>
+                    :
+                    <h2 className="text-light">You're logged out</h2>
+                }
                 <div className="row d-flex justify-content-between">
-                    {users.map(user =>
+                    {userData && userData.users.map((user: userType) =>
                         <li key={user.id} className="card">
                             <div className="card-body">
                                 <h5 className="card-title">{user.name}</h5>
@@ -57,6 +49,79 @@ export const UserContainer = () => {
                                     Company: <b>{user.company.name}</b>
                                 </small>
                                 <br /><br />
+                                {currentuser ?
+                                    <div>
+                                        {
+                                            (user.islike === 0) ?
+                                                <>
+                                                    <i className="fas fa-thumbs-up text-success"
+                                                        style={{ cursor: 'pointer', userSelect: 'none' }}
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            dispatch(updateLikes(user.id, 1))
+                                                        }}>
+                                                    </i>
+                                                    &nbsp;&nbsp;&nbsp;
+                                                    <i className="fas fa-thumbs-down text-danger"
+                                                        style={{ cursor: 'pointer', userSelect: 'none' }}
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            dispatch(updateDislikes(user.id, 2))
+                                                        }}>
+                                                    </i>
+                                                </>
+                                                :
+                                                null
+                                        }
+
+                                        {
+                                            (user.islike === 1) ?
+                                                <>
+                                                    <i className="fas fa-thumbs-down text-danger"
+                                                        style={{ cursor: 'pointer', userSelect: 'none' }}
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            dispatch(updateDislikes(user.id, 2))
+                                                        }}>
+                                                    </i>
+                                                </>
+                                                :
+                                                null
+                                        }
+
+                                        {
+                                            (user.islike === 2) ?
+                                                <>
+                                                    <i className="fas fa-thumbs-up text-success"
+                                                        style={{ cursor: 'pointer', userSelect: 'none' }}
+                                                        onClick={(e) => {
+                                                            e.preventDefault();
+                                                            dispatch(updateLikes(user.id, 1))
+                                                        }}>
+                                                    </i>
+                                                </>
+                                                :
+                                                null
+                                        }
+                                        &nbsp;
+                                        <p className="mb-0">Likes: {user.likecount}</p>
+                                        <p>Dislikes: {user.dislikecount}</p>
+                                    </div>
+                                    :
+                                    <>
+                                        <i className="fas fa-thumbs-up text-success"
+                                            style={{ cursor: 'pointer', userSelect: 'none' }}
+                                            data-toggle="modal"
+                                            data-target="#loginModal">
+                                        </i>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <i className="fas fa-thumbs-down text-danger"
+                                            style={{ cursor: 'pointer', userSelect: 'none' }}
+                                            data-toggle="modal"
+                                            data-target="#loginModal">
+                                        </i>
+                                    </>
+                                }
                             </div>
                         </li>
                     )}
