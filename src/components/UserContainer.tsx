@@ -10,7 +10,7 @@ export const UserContainer = () => {
 
     const dispatch = useDispatch();
     const userData: userData = useSelector((state: RootState) => state.userReducer);
-    const authData: authData  = useSelector((state: RootState) => state.loginReducer);
+    const authData: authData  = useSelector((state: RootState) => state.authReducer);
 
 
     useEffect(() => {

@@ -6,6 +6,7 @@ import { Modal, NavLink } from 'reactstrap';
 import { loginAction, logoutAction } from '../redux/action/loginAction';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/reducer';
+import { authData } from '../interfaces';
 
 interface loginType {
     login_email: string,
@@ -18,8 +19,8 @@ const Header = () => {
     const dispatch = useDispatch();
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [loginModal, setLoginModal] = useState<boolean>(false);
-    
-    const authData: { isLoggedIn: boolean, currentuser: string } = useSelector((state: RootState) => state.loginReducer);
+
+    const authData: authData = useSelector((state: RootState) => state.authReducer);
 
     // console.log(authData);
     const [data, setData] = useState<loginType>({

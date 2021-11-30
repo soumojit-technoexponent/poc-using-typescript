@@ -13,7 +13,7 @@ const initialState = {
     currentuser: ''
 }
 
-const loginReducer = (state: CurrentState = initialState, action: CurrentAction) => {
+const authReducer = (state: CurrentState = initialState, action: CurrentAction) => {
     switch (action.type) {
         case 'LOGIN_SUCCESS':
             return {
@@ -34,4 +34,4 @@ const loginReducer = (state: CurrentState = initialState, action: CurrentAction)
     }
 }
 
-export default loginReducer;
+export default authReducer;
