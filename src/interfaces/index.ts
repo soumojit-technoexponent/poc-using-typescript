@@ -22,3 +22,9 @@ export interface authData {
     isLoggedIn: boolean,
     currentuser: string
 }
+
+export interface loginType {
+    login_email: string,
+    login_password: string,
+    error: string,
+};

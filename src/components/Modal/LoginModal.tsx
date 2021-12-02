@@ -6,13 +6,7 @@ import Visibility from '@material-ui/icons/Visibility';
 import { useDispatch } from 'react-redux';
 import { loginAction } from '../../redux/action';
 import { Link } from 'react-router-dom';
-
-
-interface loginType {
-    login_email: string,
-    login_password: string,
-    error: string,
-};
+import { loginType } from '../../interfaces';
 
 type propsType = {
     loginModal: boolean,
@@ -103,7 +97,7 @@ const LoginModal = (props: propsType) => {
                                 Sign In
                             </Button>
                         </div>
-                        <h6>Not yet a member?<Link to="" onClick={props.toggleSignUpModal}>Sign Up</Link>
+                        <h6>Not yet a member? <Link to="" onClick={props.toggleSignUpModal}>Sign Up</Link>
                         </h6>
                     </form>
                 </div>

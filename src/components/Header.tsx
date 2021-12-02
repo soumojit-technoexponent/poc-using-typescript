@@ -39,7 +39,7 @@ const Header = () => {
         <div>
             <nav className="navbar navbar-expand-lg navbar-light bg-light px-5">
                 <div className="container">
-                    <Link className="navbar-brand" to="/">POC Using Typescript</Link>
+                    <Link className="navbar-brand" to="/">POC Using TypeScript</Link>
                     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
