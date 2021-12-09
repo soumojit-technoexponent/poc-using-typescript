@@ -1,6 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
-import { Button, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@material-ui/core';
-import { Modal } from 'reactstrap';
+import React, { useState } from 'react';
+import { Button } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../redux/reducer';
 import { logoutAction } from '../redux/action';
@@ -10,7 +9,7 @@ import LoginModal from './Modal/LoginModal';
 import SignUpModal from './Modal/SignUpModal';
 
 
-const Header = () => {
+const Header: React.FC = () => {
 
     const dispatch = useDispatch();
     const [loginModal, setLoginModal] = useState<boolean>(false);

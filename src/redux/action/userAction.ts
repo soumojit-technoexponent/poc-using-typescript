@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { Dispatch } from 'redux';
 
 export const fetchUsersRequest = () => {
     return {
@@ -42,7 +43,7 @@ export const updateDislikes = (id: number, count: number) => {
 }
 
 export const fetchUsers = () => {
-    return (dispatch: any) => {
+    return (dispatch: Dispatch) => {
         dispatch(fetchUsersRequest())
         axios
             .get('https://jsonplaceholder.typicode.com/users')

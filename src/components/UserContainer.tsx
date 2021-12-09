@@ -143,7 +143,3 @@ const UserContainer = () => {
 }
 
 export default UserContainer;
-
-function useHistory() {
-    throw new Error('Function not implemented.');
-}
