@@ -15,7 +15,7 @@ const DemoMap = () => {
 
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: process.env.Google_Api_Key as string
+        googleMapsApiKey: "AIzaSyBLAmxcVyaj-sKS4ewbQsuW2HwNieOrI10"
     })
 
     const [map, setMap] = useState(null)
