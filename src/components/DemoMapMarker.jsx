@@ -181,7 +181,7 @@ class DemoMapMarker extends React.Component {
 
                 <div className='map-container'>
                     <LoadScript
-                        googleMapsApiKey="AIzaSyBLAmxcVyaj-sKS4ewbQsuW2HwNieOrI10"
+                        googleMapsApiKey={process.env.Google_Api_Key}
                     >
                         <GoogleMap
                             // required
